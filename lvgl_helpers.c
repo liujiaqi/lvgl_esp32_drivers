@@ -154,7 +154,7 @@ bool lvgl_spi_driver_init(int host,
     int dma_channel,
     int quadwp_pin, int quadhd_pin)
 {
-    assert((0 <= host) && (SPI_HOST_MAX > host));
+    assert((SPI1_HOST < host) && (SPI3_HOST >= host));
     const char *spi_names[] = {
         "SPI1_HOST", "SPI2_HOST", "SPI3_HOST"
     };
@@ -175,7 +175,7 @@ bool lvgl_spi_driver_init(int host,
     };
 
     ESP_LOGI(TAG, "Initializing SPI bus...");
-    #if defined (CONFIG_IDF_TARGET_ESP32C3)
+    #if SOC_GDMA_SUPPORTED
     dma_channel = SPI_DMA_CH_AUTO;
     #endif
     esp_err_t ret = spi_bus_initialize(host, &buscfg, (spi_dma_chan_t)dma_channel);
